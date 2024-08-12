@@ -24,7 +24,29 @@ app.get('/mostrar', async (req, res) => {
         usuarios: consulta,
 
     });
-})
+});
+
+
+app.get("/insertarUsuario", async (req, res) => {
+    const usu={
+    correo:"pts@hotmail.com",
+    pass:"12345",
+    rol:"cliente",
+    habilitado:true
+    }
+    let usuarioTemporal = await modeloUsuario(usu).save();
+    
+    console.log(usuarioTemporal._id)
+
+    const clien = {
+        nombre:"prueba",
+        telefono:"123456789",
+        direccion:"calle 123 # 45 69",
+        habilitado:true,
+        usuario: usuarioTemporal._id
+    }
+    await clienteModel(clien).save(); 
+});
 
 app.get("/usuarios", async (req, res) => { // es una promesa que cuando queramos hacer una funcion el await dice que hay que esperar que este caido o no entonces es una promesa
     const consulta = await modeloUsuario.find({});
@@ -163,7 +185,7 @@ app.get('/productos', async (req, res) => {
         const productos = await productoModel.find({});
         res.status(200).json(productos);
     } catch (error) {
-        res.status(500).json({ message: 'Pedido no encontrado'});
+        res.status(500).json({ message: 'Pedido no encontrado' });
     }
 });
 
@@ -196,7 +218,7 @@ app.post('/productos', async (req, res) => {
 app.put('/productos/:title', async (req, res) => {
     try {
         const producto = await productoModel.findOneAndUpdate(
-            { title: req.params.title },req.body,{ new: true });
+            { title: req.params.title }, req.body, { new: true });
 
         if (producto) {
             res.status(200).json({ message: 'Producto actualizado correctamente', producto });
@@ -213,7 +235,7 @@ app.put('/productos/:title', async (req, res) => {
 app.delete('/productos/:title', async (req, res) => {
     try {
         const producto = await productoModel.findOneAndDelete({ title: req.params.title });
-        
+
         if (producto) {
             res.status(200).json({ message: 'Producto eliminado correctamente', producto });
         } else {
@@ -257,7 +279,8 @@ app.post('/pedidos', async (req, res) => {
         const nuevoPedido = new pedidoModel(req.body);
         const pedido = await nuevoPedido.save();
         res.status(201).json({
-            message: 'Pedido creado exitosamente',pedido});
+            message: 'Pedido creado exitosamente', pedido
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -267,7 +290,7 @@ app.post('/pedidos', async (req, res) => {
 app.put('/pedidos/:cliente', async (req, res) => {
     try {
         const pedido = await pedidoModel.findOneAndUpdate(
-            { cliente: req.params.cliente },req.body,
+            { cliente: req.params.cliente }, req.body,
             { new: true }
         );
 
@@ -297,5 +320,13 @@ app.delete('/pedidos/:cliente', async (req, res) => {
     }
 });
 
+const emailService = require('./backend/utils/email_service');
+app.get('/enviarCorreo', async (req, res) => {
+    await emailService.sendEmail(
+        "deivy273@gmail.com",
+        "Confirmación de Registro",
+        "Bienvenido a la tienda en línea más top de todo el mundo",
+    );
+})
 
 app.listen(process.env.PORT)

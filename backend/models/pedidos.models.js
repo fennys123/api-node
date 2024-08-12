@@ -1,21 +1,28 @@
 const conexion = require('../config/connection');
+const { default: mongoose } = require('mongoose');
 
 // Define el esquema del pedido
 const pedidoSchema = new conexion.Schema({
     cliente: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'cliente',
         required: [true, 'El cliente es obligatorio']
     },
-    carrito: {
+    carrito: [{
         producto: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'productos',
             required: [true, 'El producto es obligatorio']
+        },
+        nombre: {
+            type: mongoose.Schema.Types.String,
+            required: [true, 'El nombre es obligatorio']
         },
         cantidad: {
             type: Number,
             required: [true, 'La cantidad es obligatoria']
         }
-    },
+    }],
     subtotal: {
         type: Number,
         required: [true, 'El subtotal es obligatorio']
@@ -33,13 +40,10 @@ const pedidoSchema = new conexion.Schema({
         enum: ['creado', 'pagado', 'enviado', 'recibido', 'cancelado', 'finalizado'],
         default: 'creado'
     },
-    fechaPedido: {
-        type: Date,
-        default: Date.now
-    }
-});
+    
+},{ versionKey: false } );
 
 // Usa `mongoose.models` para evitar sobrescribir el modelo
-const pedidoModel = conexion.models.pedidos || conexion.model('pedidos', pedidoSchema);
+const pedidoModel = conexion.model('pedidos', pedidoSchema);
 
 module.exports = pedidoModel;
