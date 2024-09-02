@@ -1,30 +1,39 @@
 const express = require('express');
 const router = express.Router();
+const controladorproductos = require('../controller/producto.controller');
+const controladorCliente = require('../controller/cliente.controller');
+const controladorPedidos = require('../controller/pedidos.controller');
+const controladorUsuarios = require('../controller/user.controller');
 
-const controladorproductos = require('../controller/producto.controller')
+// Rutas para productos
+router.get('/productos', controladorproductos.listarProductos);
+router.get('/productos/:precio', controladorproductos.consultarProductos);
+router.post('/productos', controladorproductos.agregarProductos);
+router.put('/productos/:title', controladorproductos.actualizarProductos);
+router.delete('/productos/:precio', controladorproductos.eliminarProductos);
 
-//modelo productos
-
-router.get('/productos',controladorproductos.listarProductos)
-
-router.get('/productos/:precio',controladorproductos.consultarProductos)
-
-router.post('/productos1',controladorproductos.agregarProductos)
-
-// router.put('/productos/:title',controladorproductos.actualizarproductos)
-
-// router.delete('/productos/:title',controladorproductos.eliminarproductos)
+// Rutas para clientes
+router.get('/clientes', controladorCliente.listarClientes);
+router.get('/clientes/:correo', controladorCliente.consultarClientes);
+router.post('/clientes', controladorCliente.agregarClientes);
+router.put('/clientes/:correo', controladorCliente.actualizarClientes);
+router.delete('/clientes/:correo', controladorCliente.eliminarClientes);
 
 
-//modelo cliente
-//app.get('/clientes',controladorproductos.listarClientes)
+// Rutas para pedidos
+router.get('/pedidos',controladorPedidos.listarPedidos)
+router.get('/pedidos/:cliente',controladorPedidos.consultarPedidos)
+router.post('/pedidos',controladorPedidos.agregarPedidos)
+router.put('/pedidos/:cliente',controladorPedidos.actualizarPedidos)
+router.delete('/pedidos/:cliente',controladorPedidos.eliminarPedidos)
 
-// app.get('/clientes/:correo',controladorproductos.consultarClientes)
+// Rutas para usuarios
+router.get('/usuarios',controladorUsuarios.listarUsuarios)
+router.get('/usuarios/:correo',controladorUsuarios.consultarUsuarios)
+router.post('/usuarios',controladorUsuarios.agregarUsuarios)
+router.put('/usuarios/:nombre',controladorUsuarios.actualizarUsuarios)
+router.delete('/usuarios/:telefono',controladorUsuarios.eliminarUsuarios)
 
-// app.post('/clientess',controladorproductos.agregarClientes)
+module.exports = router;
 
-// app.put('/clientes/:nombre',controladorproductos.actualizarClientes)
 
-// app.delete('/clientes/:telefono',controladorproductos.eliminarClientes)
-
-module.exports = router

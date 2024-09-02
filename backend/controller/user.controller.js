@@ -11,57 +11,58 @@ exports.listarUsuarios = async(req,res)=>{
 }
 
 exports.consultarUsuarios = async(req,res)=>{
-    try {
-        // Buscar el producto por el campo `precio`
-        const producto = await modeloUsuarios.findOne({ price: req.params.precio });
-        if (producto) {
-            res.status(200).json(producto);
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    const busqueda = await modeloUsuario.findOne({ correo: req.params.correo });
+    if (busqueda) {
+        res.status(200).json(busqueda);
+    }
+    else {
+        res.status(404).json("No hay usuarios");
     }
 
 }
 
 exports.agregarUsuarios = async(req,res)=>{
-    try {
-        const nuevoProducto = new modeloUsuarios(req.body);
-        const producto = await nuevoProducto.save();
-        res.status(201).json(producto);
-    } catch (error) {
-        res.status(400).json({ message: 'No se pudo registrar el producto: ' + error.message });
+    console.log(req.body)
+    const nuevo = {
+        correo: req.body.correo,
+        pass: req.body.pass,
+        rol: req.body.rol,
+        habilitado: true,
+    };
+    let consulta = await modeloUsuario.create(nuevo);
+    if (consulta) {
+        res.status(200).json("Usuario creado");
+    }
+    else {
+        res.status(404).json("No se pudo crear el usuario");
     }
 }
 
 exports.actualizarUsuarios = async(req,res)=>{
-    try {
-        const producto = await modeloUsuarios.findOneAndUpdate(
-            { title: req.params.title }, req.body, { new: true });
-
-        if (producto) {
-            res.status(200).json({ message: 'Producto actualizado correctamente', producto });
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(400).json({ message: error.message });
+    const nombreUser = req.body.nombreuser;
+    const usuarioEditado = {
+        nombre: nombreUser,
+        correo: req.body.correouser,
+        pasword: req.body.passworduser,
+        rol: req.body.roluser,
+        habilitado: true,
+    };
+    let actualizado = await modeloUsuario.findOneAndUpdate({ nombre: nombreUser }, usuarioEditado);
+    if (actualizado) {
+        res.json(actualizado);
+    } else {
+        res.status(404).json({ message: "Usuario no encontrado" });
     }
 
 }
 
 exports.eliminarUsuarios = async(req,res)=>{
-    try {
-        const producto = await modeloUsuarios.findOneAndDelete({ title: req.params.title });
-
-        if (producto) {
-            res.status(200).json({ message: 'Producto eliminado correctamente', producto });
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    console.log(req.body.correo, req.body.correouser)
+    let eliminacion = await modeloUsuario.findOneAndDelete({ correo: req.body.correo });
+    if (eliminacion) {
+        res.json(eliminacion);
+    } else {
+        res.status(404).json({ message: "Usuario no encontrado" });
     }
 
 }

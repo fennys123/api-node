@@ -1,6 +1,5 @@
 const modeloProducto = require('../models/productos.models')
 
-
 exports.listarProductos = async(req,res)=>{
     let listadoProducto = await modeloProducto.find({});
     if (listadoProducto)
@@ -10,9 +9,8 @@ exports.listarProductos = async(req,res)=>{
 
 }
 
-exports.consultarProductos = async(req,res)=>{
+exports.consultarProductos = async (req, res) => {
     try {
-        // Buscar el producto por el campo `precio`
         const producto = await modeloProducto.findOne({ price: req.params.precio });
         if (producto) {
             res.status(200).json(producto);
@@ -22,22 +20,24 @@ exports.consultarProductos = async(req,res)=>{
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
 
-}
 
-exports.agregarProductos = async(req,res)=>{
+exports.agregarProductos = async (req, res) => {
     try {
-        const nuevoProducto = new modeloProducto(req.body);
+        const nuevoProducto = new modeloProducto(req.json);
         const producto = await nuevoProducto.save();
         res.status(201).json(producto);
     } catch (error) {
         res.status(400).json({ message: 'No se pudo registrar el producto: ' + error.message });
     }
-}
+};
 
-exports.actualizarproductos = async(req,res)=>{
+
+
+exports.actualizarProductos = async (req, res) => {
     try {
-        const producto = await modeloProducto.findOneAndUpdate(
+        const producto = await productoModel.findOneAndUpdate(
             { title: req.params.title }, req.body, { new: true });
 
         if (producto) {
@@ -48,12 +48,11 @@ exports.actualizarproductos = async(req,res)=>{
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
+};
 
-}
-
-exports.eliminarproducto = async(req,res)=>{
+exports.eliminarProductos = async (req, res) => {
     try {
-        const producto = await modeloProducto.findOneAndDelete({ title: req.params.title });
+        const producto = await productoModel.findOneAndDelete({ title: req.params.title });
 
         if (producto) {
             res.status(200).json({ message: 'Producto eliminado correctamente', producto });
@@ -63,6 +62,6 @@ exports.eliminarproducto = async(req,res)=>{
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
 
-}
 
