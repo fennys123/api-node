@@ -1,26 +1,42 @@
 const exp = require("express");
 const modeloUsuario = require("./backend/models/user.models");
 const clienteModel = require('./backend/models/cliente.models');
-const productoModel = require('./backend/models/productos.models');
 const pedidoModel = require('./backend/models/pedidos.models');
 const mongoose = require('mongoose');
 const logger = require("morgan");
 require('dotenv').config();
+const router = require('./backend/router/router')
+
+
 
 const app = exp();
+app.use('/v1',router)
+
+
 app.use(exp.urlencoded({ extended: false }));
 app.use(exp.json());
 app.use(logger("dev"));
+
+
+//el inicio de la pagina
+app.get('/', async (req, res) => {
+    res.render('pages/index');
+});
+
+
+
 
 
 const path = require('path')
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, '/frontend/views'));
 
+
+//Rutas para el modelo usuario
 app.get('/mostrar', async (req, res) => {
     const consulta = await modeloUsuario.find({});
 
-    res.render('pages/index', {
+    res.render('pages/index2', {
         usuarios: consulta,
 
     });
@@ -114,6 +130,10 @@ app.delete("/usuarios/:correo", async (req, res) => {
     }
 });
 
+
+
+
+
 // Rutas para el modelo cliente
 app.get('/clientes', async (req, res) => {
     try {
@@ -179,72 +199,6 @@ app.delete('/clientes/:correo', async (req, res) => {
 });
 
 
-// Rutas para el modelo producto
-app.get('/productos', async (req, res) => {
-    try {
-        const productos = await productoModel.find({});
-        res.status(200).json(productos);
-    } catch (error) {
-        res.status(500).json({ message: 'Pedido no encontrado' });
-    }
-});
-
-app.get('/productos/:precio', async (req, res) => {
-    try {
-        // Buscar el producto por el campo `precio`
-        const producto = await productoModel.findOne({ price: req.params.precio });
-        if (producto) {
-            res.status(200).json(producto);
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
-
-
-app.post('/productos', async (req, res) => {
-    try {
-        const nuevoProducto = new productoModel(req.body);
-        const producto = await nuevoProducto.save();
-        res.status(201).json(producto);
-    } catch (error) {
-        res.status(400).json({ message: 'No se pudo registrar el producto: ' + error.message });
-    }
-});
-
-
-app.put('/productos/:title', async (req, res) => {
-    try {
-        const producto = await productoModel.findOneAndUpdate(
-            { title: req.params.title }, req.body, { new: true });
-
-        if (producto) {
-            res.status(200).json({ message: 'Producto actualizado correctamente', producto });
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
-
-
-
-app.delete('/productos/:title', async (req, res) => {
-    try {
-        const producto = await productoModel.findOneAndDelete({ title: req.params.title });
-
-        if (producto) {
-            res.status(200).json({ message: 'Producto eliminado correctamente', producto });
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
 
 
 // Rutas para el modelo pedido

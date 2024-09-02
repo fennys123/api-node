@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+        	<html lang="en">
+        	<head>
+            	<%- include('../partials/head'); %>
+        	</head>
+        	<body class="container">
+	<table class="table">
+	<thead>
+    	<th>titulo</th>
+    	<th>Precio</th>
+    	<th>Descripcion</th>
+    	<th>Categoria</th>
+    	<th>Imagenes</th>
+	</thead>
+	<tbody>
+<% listadoProducto.forEach(producto => { %>
+    	<tr>
+        	<td><%= producto.title %></td>
+        	<td><%= producto.price %></td>
+        	<td><%= producto.description %></td>
+        	<td><%= producto.category.name %></td>
+        	<td><%= producto.images %></td>
+        	<td>
+            	<button   class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick=""><i class="bi bi-pencil-square" style=""></i></button>
+            	<button class="btn btn-outline-danger" onclick=""><i class="bi bi-trash"></i></button>
+      	 
+        	</td>
+    	</tr>
+
+<%})%>
+</tbody>
+</table>
+
+<%- include ('../partials/footer'); %>
+
+</body>

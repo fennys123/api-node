@@ -5,13 +5,13 @@ const productoSchema = new conexion.Schema({
         type: String,
         required: [true, 'El título es obligatorio']
     },
-    description: {
-        type: String,
-        required: [true, 'La descripción es obligatoria']
-    },
     price: {
         type: Number,
         required: [true, 'El precio es obligatorio']
+    },
+    description: {
+        type: String,
+        required: [true, 'La descripción es obligatoria']
     },
     category: {
         id: {
