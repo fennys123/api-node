@@ -2,7 +2,7 @@ const conexion = require('../config/connection');
 const { default: mongoose } = require('mongoose');
 
 // Define el esquema del pedido
-const pedidoSchema = new conexion.Schema({
+const pedidoSchema = new mongoose.Schema({
     cliente: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'cliente',
@@ -44,6 +44,6 @@ const pedidoSchema = new conexion.Schema({
 },{ versionKey: false } );
 
 // Usa `mongoose.models` para evitar sobrescribir el modelo
-const pedidoModel = conexion.model('pedidos', pedidoSchema);
+const pedidoModel = mongoose.model('pedidos', pedidoSchema);
 
 module.exports = pedidoModel;

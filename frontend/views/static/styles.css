@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f8f8f8;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    background-color: #f8f8f8;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.navbar {
+    margin-bottom: 0; /* Ajusta si es necesario */
+    padding-top: 10px; /* Ajusta según el espacio que desees arriba */
+    padding-bottom: 10px; /* Ajusta el espacio en la parte inferior si es necesario */
+}
+
+.container-fluid {
+    padding: 0; /* Asegúrate de que el contenedor no tenga relleno */
+}

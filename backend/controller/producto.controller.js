@@ -1,11 +1,11 @@
 const modeloProducto = require('../models/productos.models')
 
-exports.listarProductos = async(req,res)=>{
+exports.listarProductos = async (req, res) => {
     let listadoProducto = await modeloProducto.find({});
     if (listadoProducto)
         res.render('pages/listarProductos', { listadoProducto })
     else
-        res.render('pages/listarProductos',{"mensaje":"no hay datos disponibles"})
+        res.render('pages/listarProductos', { "mensaje": "no hay datos disponibles" })
 
 }
 
@@ -24,44 +24,52 @@ exports.consultarProductos = async (req, res) => {
 
 
 exports.agregarProductos = async (req, res) => {
-    try {
-        const nuevoProducto = new modeloProducto(req.json);
-        const producto = await nuevoProducto.save();
-        res.status(201).json(producto);
-    } catch (error) {
-        res.status(400).json({ message: 'No se pudo registrar el producto: ' + error.message });
-    }
+    console.log(req.body);
+    const nuevoProducto = {
+        referencia: req.body.referenciaProducto,
+        nombre: req.body.nombreProducto,
+        descripcion: req.body.descripcionProducto,
+        precio: req.body.precioProducto,
+        stock: req.body.stockProducto,
+        imagen: req.body.imagenProducto,
+        habilitado: true,
+    };
+
+    let Insercion = await modeloProducto.create(nuevoProducto);
+    if (Insercion)
+        res.status(200).json({ "mensaje": "registro exitoso" })
+    else
+        res.status(404).json({ "mensaje": "se presento un error" })
 };
 
 
 
 exports.actualizarProductos = async (req, res) => {
-    try {
-        const producto = await productoModel.findOneAndUpdate(
-            { title: req.params.title }, req.body, { new: true });
+    const actualizarProducto = {
+        referencia: req.params.referenciaproducto,
+        nombre: req.params.nombreproducto,
+        descripcion: req.params.descripcionproducto,
+        precio: req.params.precioproducto,
+        stock: req.params.stockproducto,
+        imagen: req.params.imagenproducto,
+        habilitado: true,
+    };
 
-        if (producto) {
-            res.status(200).json({ message: 'Producto actualizado correctamente', producto });
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+    let Actualizacion = await modeloProducto.create(actualizarProducto);
+    if (Actualizacion)
+        res.status(200).json({ "mensaje": "actualizado correctamente" })
+    else
+        res.status(404).json({ "mensaje": "se presento un error" })
 };
 
 exports.eliminarProductos = async (req, res) => {
-    try {
-        const producto = await productoModel.findOneAndDelete({ title: req.params.title });
+    console.log(req.params.id, req.body.referenciaproductoModel)
+    let eliminacion = await modeloProducto.findOneAndDelete({ referencia: req.params.id });
+    if (eliminacion)
+        res.status(200).json({ "mensaje": "eliminacion exitosa" })
+    else
+        res.status(404).json({ "mensaje": "se presento un error" })
 
-        if (producto) {
-            res.status(200).json({ message: 'Producto eliminado correctamente', producto });
-        } else {
-            res.status(404).json({ message: 'Producto no encontrado' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
 };
 
 

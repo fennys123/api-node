@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo</title>
+    <link rel="stylesheet" href="/styles.css">
+    <%- include('../partials/head'); %>
+</head>
+<body>
+    <header>
+        <h1>Catálogo de Productos</h1>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/catalogo">Catálogo</a>
+            <a href="/carrito">Carrito</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Productos disponibles</h2>
+        <ul>
+            <% productos.forEach(producto => { %>
+                <li>
+                    <h3><%= producto.nombre %></h3>
+                    <p>Precio: $<%= producto.precio %></p>
+                    <button data-id="<%= producto.id %>">Añadir al carrito</button>
+                </li>
+            <% }) %>
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; 2024 Tienda</p>
+    </footer>
+    <script src="/scripts.js"></script>
+</body>
+</html>

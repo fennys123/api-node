@@ -7,20 +7,26 @@
         	<body class="container">
 	<table class="table">
 	<thead>
-    	<th>titulo</th>
+		<th>referencia</th>
+    	<th>nombre</th>
     	<th>Precio</th>
     	<th>Descripcion</th>
-    	<th>Categoria</th>
-    	<th>Imagenes</th>
+		<td>stock </td>
+    	<th>Imagen</th>
+		<th>habilitado</th>
+
 	</thead>
 	<tbody>
 <% listadoProducto.forEach(producto => { %>
     	<tr>
-        	<td><%= producto.title %></td>
-        	<td><%= producto.price %></td>
-        	<td><%= producto.description %></td>
-        	<td><%= producto.category.name %></td>
-        	<td><%= producto.images %></td>
+			<td><%= producto.referencia %></td>
+        	<td><%= producto.nombre %></td>
+        	<td><%= producto.precio %></td>
+        	<td><%= producto.descripcion %></td>
+			<td><%= producto.stock %></td>
+        	<td><%= producto.imagen %></td>
+			<td><%= producto.habilitado %></td>
+
         	<td>
             	<button   class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick=""><i class="bi bi-pencil-square" style=""></i></button>
             	<button class="btn btn-outline-danger" onclick=""><i class="bi bi-trash"></i></button>

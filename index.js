@@ -1,13 +1,12 @@
 const exp = require("express");
-const modeloUsuario = require("./backend/models/user.models");
-const clienteModel = require('./backend/models/cliente.models');
-const pedidoModel = require('./backend/models/pedidos.models');
 const mongoose = require('mongoose');
 const logger = require("morgan");
 require('dotenv').config();
 const router = require('./backend/router/router')
 const express = require('express');
 const bodyParser = require('body-parser');
+const modeloUsuarios = require('./backend/models/user.models')
+
 
 
 const app = exp();
@@ -16,7 +15,7 @@ app.use('/v1',router)
 app.use(exp.urlencoded({ extended: true }));
 app.use(exp.json());
 app.use(logger("dev"));
-
+app.use(express.static('./frontend/views/static'))
 
 //el inicio de la pagina
 app.get('/', async (req, res) => {
@@ -34,14 +33,13 @@ app.set('views', path.join(__dirname, '/frontend/views'));
 
 //Rutas para el modelo usuario
 app.get('/mostrar', async (req, res) => {
-    const consulta = await modeloUsuario.find({});
+    const consulta = await modeloUsuarios.find({});
 
     res.render('pages/index2', {
         usuarios: consulta,
 
     });
 });
-
 
 app.get("/insertarUsuario", async (req, res) => {
     const usu={
@@ -64,15 +62,6 @@ app.get("/insertarUsuario", async (req, res) => {
     await clienteModel(clien).save(); 
 });
 
-
-
-
-
-
-
-
-
-
 const emailService = require('./backend/utils/email_service');
 app.get('/enviarCorreo', async (req, res) => {
     await emailService.sendEmail(
@@ -81,5 +70,26 @@ app.get('/enviarCorreo', async (req, res) => {
         "Bienvenido a la tienda en línea más top de todo el mundo",
     );
 })
+
+app.get('/catalogo', (req, res) => {
+    // Ejemplo de productos
+    const productos = [
+        { id: 1, nombre: 'carro', precio: 10 },
+        { id: 2, nombre: 'avion', precio: 20 }
+    ];
+    res.render('pages/catalogo', { productos });
+});
+
+app.get('/carrito', (req, res) => {
+    // Ejemplo de productos en el carrito
+    const carrito = [
+        { id: 1, nombre: 'Producto 1', precio: 10, cantidad: 2 },
+        { id: 2, nombre: 'Producto 2', precio: 20, cantidad: 1 }
+    ];
+    res.render('pages/carrito', { carrito });
+});
+
+
+
 
 app.listen(process.env.PORT)

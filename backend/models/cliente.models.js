@@ -1,7 +1,7 @@
 const { default: mongoose, version } = require('mongoose');
 const conexion = require('../config/connection');
 
-const clienteSchema = new conexion.Schema({
+const clienteSchema = new mongoose.Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre es obligatorio']
@@ -32,6 +32,6 @@ const clienteSchema = new conexion.Schema({
 }, { versionKey: false }
 );
 
-const clienteModel = conexion.model('clientes', clienteSchema);
+const clienteModel = mongoose.model('clientes', clienteSchema);
 
 module.exports = clienteModel;

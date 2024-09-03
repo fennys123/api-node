@@ -4,29 +4,40 @@
 
 <head>
     <%- include('../partials/head'); %>
+    <style>
+        .navbar {
+            margin-bottom: 0;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        body {
+            padding-top: 60px; /* Ajusta este valor si es necesario */
+        }
+    </style>
 </head>
 
 <body class="container">
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark" style="background-color: greenyellow; margin-bottom: 0; padding: 10px 0;">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Logo</a>
+            <a class="navbar-brand" href="/">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="/catalogo">Catalogo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" href="/carrito"><i class="bi bi-basket-fill"></i></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button"
-                            data-bs-toggle="dropdown">Dropdown</a>
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Dropdown</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#">Link</a></li>
                             <li><a class="dropdown-item" href="#">Another link</a></li>
@@ -40,12 +51,11 @@
                 <button class="btn btn-primary" type="button">Search</button>
             </form>
         </div>
-        </div>
-    </nav>
+    </nav>    
     <main>
         <div class="jumbotron">
-            <h1>This is great</h1>
-            <p>Welcome to templating using EJS</p>
+            <h1 style="color: red;">Tienda</h1>
+            <p>Bienvenido a nuestra tienda</p>
         </div>
         <table id="example" class="table table-striped" style="width:100%">
             <thead>

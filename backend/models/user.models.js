@@ -1,6 +1,7 @@
 const conexion = require('../config/connection')
+const { default: mongoose, version } = require('mongoose');
 
-const userSchema = new conexion.Schema({
+const userSchema = new mongoose.Schema({
     correo:{
         type: String,
         unique: [true, 'El correo ya existe'],
@@ -23,6 +24,6 @@ const userSchema = new conexion.Schema({
     }
 },{ versionKey: false });
 
-const userModel = conexion.model('usuarios', userSchema);
+const userModel = mongoose.model('usuarios', userSchema);
 
 module.exports = userModel;

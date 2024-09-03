@@ -1,41 +1,41 @@
 const conexion = require('../config/connection');
+const { default: mongoose, version } = require('mongoose');
 
-const productoSchema = new conexion.Schema({
-    title: {
+const productoSchema = new mongoose.Schema({
+    referencia:{
+        type:String,
+        require: [true,'la referencia es obligatoria']
+    },
+    nombre: {
         type: String,
         required: [true, 'El título es obligatorio']
     },
-    price: {
+    precio: {
         type: Number,
-        required: [true, 'El precio es obligatorio']
+        default: 0,
+        min: [0,'el precio minimo  es cero']
     },
-    description: {
+    descripcion: {
         type: String,
         required: [true, 'La descripción es obligatoria']
     },
-    category: {
-        id: {
-            type: Number,
-            required: [true, 'El ID de la categoría es obligatorio']
-        },
-        name: {
-            type: String,
-            required: [true, 'El nombre de la categoría es obligatorio']
-        },
-        image: {
-            type: String,
-            required: [true, 'La imagen de la categoría es obligatoria']
-        }
+    stock: {
+        type: Number,
+        default: 0,
+        min: [0,'el stock por defecto es cero']
     },
-    images: [
+    imagen: 
         {
             type: String,
             required: [true, 'Las imágenes son obligatorias']
-        }
-    ],
-},{ versionKey: false }
-);
+    },
+    habilitado:{
+        type:Boolean,
+        default:true
+    },
+    
+});
 
-const productoModel = conexion.model('productos', productoSchema);
+const producto = mongoose.model('productos', productoSchema);
 
-module.exports = productoModel;
+module.exports = producto;

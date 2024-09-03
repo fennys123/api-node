@@ -7,9 +7,9 @@ const controladorUsuarios = require('../controller/user.controller');
 
 // Rutas para productos
 router.get('/productos', controladorproductos.listarProductos);
-router.get('/productos/:precio', controladorproductos.consultarProductos);
+router.get('/productos/:ref', controladorproductos.consultarProductos);
 router.post('/productos', controladorproductos.agregarProductos);
-router.put('/productos/:title', controladorproductos.actualizarProductos);
+router.put('/productos/:ref', controladorproductos.actualizarProductos);
 router.delete('/productos/:precio', controladorproductos.eliminarProductos);
 
 // Rutas para clientes
@@ -33,6 +33,8 @@ router.get('/usuarios/:correo',controladorUsuarios.consultarUsuarios)
 router.post('/usuarios',controladorUsuarios.agregarUsuarios)
 router.put('/usuarios/:nombre',controladorUsuarios.actualizarUsuarios)
 router.delete('/usuarios/:telefono',controladorUsuarios.eliminarUsuarios)
+
+
 
 module.exports = router;
 
