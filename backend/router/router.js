@@ -9,8 +9,8 @@ const controladorUsuarios = require('../controller/user.controller');
 router.get('/productos', controladorproductos.listarProductos);
 router.get('/productos/:ref', controladorproductos.consultarProductos);
 router.post('/productos', controladorproductos.agregarProductos);
-router.put('/productos/:ref', controladorproductos.actualizarProductos);
-router.delete('/productos/:precio', controladorproductos.eliminarProductos);
+router.put('/productos/:ref', controladorproductos.actualizarProducto);
+router.delete('/productos/:ref', controladorproductos.eliminarProductos);
 
 // Rutas para clientes
 router.get('/clientes', controladorCliente.listarClientes);

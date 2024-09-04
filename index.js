@@ -7,6 +7,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const modeloUsuarios = require('./backend/models/user.models');
 const emailService = require('./backend/utils/email_service');
+const methodOverride = require('method-override');
 const router = require('./backend/router/router');
 
 const app = express();
@@ -16,13 +17,16 @@ app.use(logger('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(bodyParser.json());
 // Configuración de sesión
 app.use(session({
     secret: 'mi_secreto', // Cambia esto por una cadena secreta
     resave: false,
     saveUninitialized: true
 }));
+app.use(methodOverride('_method'));
+
+
 
 // Configuración de vistas
 app.set('view engine', 'ejs');
@@ -91,16 +95,16 @@ app.get('/carrito', (req, res) => {
     res.render('pages/carrito', { carrito });
 });
 
-app.post('/carrito/añadir', async (req, res) => {
+app.post('/carrito/agregar', async (req, res) => {
     const { id, cantidad } = req.body;
     const productos = [
-        { referencia: 1, nombre: 'ropa', precio: 10000, descripcion: 'prueba', stock: 50, imagen: '/images/ropa.png', habilitado: true },
-        { referencia: 2, nombre: 'ropa', precio: 20000, descripcion: 'prueba', stock: 50, imagen: '/images/ropa.png', habilitado: true }
+        { referencia: 1, nombre: 'Camisa', precio: 10000, descripcion: 'Camisa de algodón', stock: 50, imagen: '/images/camisa.png', habilitado: true },
+        { referencia: 2, nombre: 'Pantalón', precio: 20000, descripcion: 'Pantalón de mezclilla', stock: 50, imagen: '/images/pantalon.png', habilitado: true }
     ];
 
-    const producto = await productos.find(p => p.referencia == id);
+    const producto = productos.find(p => p.referencia == id);
     if (!producto) {
-        return res.status(404).send('Producto no encontrado');
+        return res.status(404).json({ error: 'Producto no encontrado' });
     }
 
     if (!req.session.carrito) {
@@ -119,7 +123,45 @@ app.post('/carrito/añadir', async (req, res) => {
         });
     }
 
-    res.redirect('/carrito');
+    // Devolver el carrito actualizado como JSON
+    res.json({
+        carrito: req.session.carrito,
+        total: req.session.carrito.reduce((total, item) => total + item.precio * item.cantidad, 0)
+    });
 });
+
+
+//pagar carrito
+app.post('/carrito/pagar', (req, res) => {
+    const pagoExitoso = true; 
+    if (pagoExitoso) {
+        req.session.carrito = []; 
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false, message: 'Error en el procesamiento del pago' });
+    }
+});
+
+
+// Eliminar un producto del carrito
+app.post('/carrito/eliminar', (req, res) => {
+    const { id } = req.body;
+    if (!req.session.carrito) {
+        return res.status(400).json({ error: 'El carrito está vacío' });
+    }
+    req.session.carrito = req.session.carrito.filter(item => item.id != id);
+    res.json({
+        carrito: req.session.carrito,
+        total: req.session.carrito.reduce((total, item) => total + item.precio * item.cantidad, 0)
+    });
+});
+
+
+// Vaciar el carrito
+app.post('/carrito/limpiar', (req, res) => {
+    req.session.carrito = [];
+    res.json({ success: true });
+});
+
 
 app.listen(process.env.PORT)

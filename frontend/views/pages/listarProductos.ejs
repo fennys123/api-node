@@ -1,74 +1,99 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container">
+    <table class="table">
+        <thead>
+            <th>Referencia</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Descripción</th>
+            <th>Stock</th>
+            <th>Imagen</th>
+            <th>Habilitado</th>
+            <th>Acciones</th>
+        </thead>
+        <tbody>
+            <% listadoProducto.forEach(producto => { %>
+                <tr>
+                    <td><%= producto.referencia %></td>
+                    <td><%= producto.nombre %></td>
+                    <td><%= producto.precio %></td>
+                    <td><%= producto.descripcion %></td>
+                    <td><%= producto.stock %></td>
+                    <td><%= producto.imagen %></td>
+                    <td><%= producto.habilitado ? 'Sí' : 'No' %></td>
+                    <td>
+                        <!-- Botón para abrir el modal de editar -->
+                        <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal" 
+                                onclick="fillEditForm(<%= JSON.stringify(producto) %>)">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
 
-        	<html lang="en">
-        	<head>
-            	<%- include('../partials/head'); %>
-        	</head>
-        	<body class="container">
-	<table class="table">
-	<thead>
-		<th>referencia</th>
-    	<th>nombre</th>
-    	<th>Precio</th>
-    	<th>Descripcion</th>
-		<td>stock </td>
-    	<th>Imagen</th>
-		<th>habilitado</th>
+                        <!-- Formulario para eliminar el producto -->
+                        <form method="POST" action="/productos/<%= producto.referencia %>?_method=DELETE" style="display:inline;">
+                            <button class="btn btn-outline-danger" type="submit">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
 
-	</thead>
-	<tbody>
-<% listadoProducto.forEach(producto => { %>
-    	<tr>
-			<td><%= producto.referencia %></td>
-        	<td><%= producto.nombre %></td>
-        	<td><%= producto.precio %></td>
-        	<td><%= producto.descripcion %></td>
-			<td><%= producto.stock %></td>
-        	<td><%= producto.imagen %></td>
-			<td><%= producto.habilitado %></td>
+    <!-- Modal para editar producto -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" method="POST" action="/productos?_method=PUT">
+                        <input type="hidden" name="id" id="productId">
+                        <div class="mb-3">
+                            <label for="editNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editNombre" name="nombre">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="editDescripcion" name="descripcion">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPrecio" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="editPrecio" name="precio">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="editStock" name="stock">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editImagen" class="form-label">Imagen</label>
+                            <input type="text" class="form-control" id="editImagen" name="imagen">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        	<td>
-				<button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="fillEditForm(<%= JSON.stringify(producto) %>)">
-					<i class="bi bi-pencil-square"></i>
-				</button>
-				<form method="POST" action="/backend/controller/producto.controller.js" style="display:inline;">
-					<input type="hidden" name="id" value="<%= producto.referencia %>">
-					<input type="hidden" name="_method" value="DELETE">
-					<button class="btn btn-outline-danger" type="submit">
-						<i class="bi bi-trash"></i>
-					</button>
-				</form>
-				
-			</td>
-			
-    	</tr>
+    <%- include('../partials/footer'); %>
 
-<%})%>
-</tbody>
-</table>
-
-<%- include ('../partials/footer'); %>
-<script>
-    function fillEditForm(product) {
-        document.getElementById('productId').value = product.referencia;
-        document.getElementById('editNombre').value = product.nombre;
-        document.getElementById('editDescripcion').value = product.descripcion;
-        document.getElementById('editPrecio').value = product.precio;
-        document.getElementById('editStock').value = product.stock;
-        document.getElementById('editImagen').value = product.imagen;
-		console.log(product);
-    }
-function eliminarProductoPorId(id, res) {
-    modeloProducto.findOneAndDelete({ referencia: id }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ mensaje: err.message });
+    <script>
+        // Llenar el formulario con los datos del producto seleccionado
+        function fillEditForm(product) {
+            document.getElementById('productId').value = product.referencia;
+            document.getElementById('editNombre').value = product.nombre;
+            document.getElementById('editDescripcion').value = product.descripcion;
+            document.getElementById('editPrecio').value = product.precio;
+            document.getElementById('editStock').value = product.stock;
+            document.getElementById('editImagen').value = product.imagen;
         }
-        if (!result) {
-            return res.status(404).json({ mensaje: "Producto no encontrado" });
-        }
-        res.status(200).json({ mensaje: "Eliminación exitosa" });
-    });
-}
-</script>
-
+    </script>
 </body>
+</html>

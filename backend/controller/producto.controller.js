@@ -22,6 +22,20 @@ exports.consultarProductos = async (req, res) => {
     }
 };
 
+exports.listarProductos = async (req, res) => {
+    try {
+        const listadoProducto = await modeloProducto.find({});
+        if (listadoProducto) {
+            res.render('pages/listarProductos', { listadoProducto });
+        } else {
+            res.render('pages/listarProductos', { mensaje: "No hay productos disponibles" });
+        }
+    } catch (error) {
+        res.status(500).send({ error: "Error al listar los productos" });
+    }
+};
+
+
 
 exports.agregarProductos = async (req, res) => {
     console.log(req.body);
@@ -43,32 +57,35 @@ exports.agregarProductos = async (req, res) => {
 };
 
 
-exports.actualizarProductos = async (req, res) => {
-    const { id, nombre, descripcion, precio, stock, imagen } = req.body;
-
+// Controlador para actualizar producto
+exports.actualizarProducto = async (req, res) => {
     try {
-        let Actualizacion = await modeloProducto.findOneAndUpdate(
-            { referencia: id },
-            { nombre, descripcion, precio, stock, imagen, habilitado: true },
-            { new: true } // Devuelve el documento actualizado
+        const { id } = req.params;
+        const { nombre, descripcion, precio, stock, imagen } = req.body;
+
+        // Buscar y actualizar el producto
+        const productoActualizado = await Producto.findByIdAndUpdate(
+            id,
+            { nombre, descripcion, precio, stock, imagen },
+            { new: true, runValidators: true }
         );
 
-        if (Actualizacion) {
-            res.status(200).json({ "mensaje": "actualizado correctamente" });
-        } else {
-            res.status(404).json({ "mensaje": "producto no encontrado" });
+        if (!productoActualizado) {
+            return res.status(404).send('Producto no encontrado');
         }
+
+        res.redirect('/productos');
     } catch (error) {
-        res.status(500).json({ "mensaje": error.message });
+        console.error(error);
+        res.status(500).send('Error al actualizar el producto');
     }
 };
 
 
-exports.eliminarProductos = async (req, res) => {
-    const { id } = req.body;
 
+exports.eliminarProductos = async (req, res) => {
     try {
-        let eliminacion = await modeloProducto.findOneAndDelete({ referencia: id });
+        let eliminacion = await modeloProducto.findOneAndDelete({ referencia: req.params.ref });
         if (eliminacion) {
             res.status(200).json({ "mensaje": "eliminación exitosa" });
         } else {
@@ -78,5 +95,11 @@ exports.eliminarProductos = async (req, res) => {
         res.status(500).json({ "mensaje": error.message });
     }
 };
+
+
+
+// Configuración de método-override para soportar PUT y DELETE en formularios HTML
+const methodOverride = require('method-override');
+
 
 
