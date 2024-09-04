@@ -3,19 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo</title>
+    <title>Menu</title>
     <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* Estilos para la barra de navegación */
+        nav {
+            background-color: #6c757d; /* Fondo gris oscuro */
+            color: #060505; /* Texto oscuro */
+            padding: 10px; /* Espaciado interno ajustado */
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex; /* Utilizar flexbox para alinear los elementos */
+            align-items: center; /* Alinear verticalmente los elementos en el centro */
+        }
+        nav a {
+            color: #080505; /* Color de los enlaces */
+            margin-right: 10px; /* Reducir el margen entre los enlaces */
+            text-decoration: none;
+            font-size: 16px; /* Ajustar el tamaño de la fuente */
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        body {
+            padding-top: 60px; /* Espacio para que el contenido no quede debajo de la barra */
+            margin: 0; /* Eliminar márgenes del cuerpo */
+            font-family: Arial, sans-serif; /* Fuente base */
+        }
+    </style>
     <%- include('../partials/head'); %>
+    <%- include('../partials/navbar'); %>
+
 </head>
 <body>
     <header>
-        <h1>Catálogo de Productos</h1>
-        <nav>
-            <a href="/">Inicio</a>
-            <a href="/catalogo">Catálogo</a>
-            <a href="/carrito">Carrito</a>
-        </nav>
-    </header>
+        <h1 style="color: red;">Menu de Productos</h1>
     <main>
         <h2>Productos disponibles</h2>
         <ul>
@@ -23,7 +47,7 @@
                 <li>
                     <h3><%= producto.nombre %></h3>
                     <p>Precio: $<%= producto.precio %></p>
-                    <button data-id="<%= producto.id %>">Añadir al carrito</button>
+                    <button data-id="<%= producto.id %>" class="btn btn-outline-success">Añadir al carrito</button>
                 </li>
             <% }) %>
         </ul>

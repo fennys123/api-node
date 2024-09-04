@@ -28,10 +28,19 @@
 			<td><%= producto.habilitado %></td>
 
         	<td>
-            	<button   class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick=""><i class="bi bi-pencil-square" style=""></i></button>
-            	<button class="btn btn-outline-danger" onclick=""><i class="bi bi-trash"></i></button>
-      	 
-        	</td>
+				<button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="fillEditForm(<%= JSON.stringify(producto) %>)">
+					<i class="bi bi-pencil-square"></i>
+				</button>
+				<form method="POST" action="/backend/controller/producto.controller.js" style="display:inline;">
+					<input type="hidden" name="id" value="<%= producto.referencia %>">
+					<input type="hidden" name="_method" value="DELETE">
+					<button class="btn btn-outline-danger" type="submit">
+						<i class="bi bi-trash"></i>
+					</button>
+				</form>
+				
+			</td>
+			
     	</tr>
 
 <%})%>
@@ -39,5 +48,27 @@
 </table>
 
 <%- include ('../partials/footer'); %>
+<script>
+    function fillEditForm(product) {
+        document.getElementById('productId').value = product.referencia;
+        document.getElementById('editNombre').value = product.nombre;
+        document.getElementById('editDescripcion').value = product.descripcion;
+        document.getElementById('editPrecio').value = product.precio;
+        document.getElementById('editStock').value = product.stock;
+        document.getElementById('editImagen').value = product.imagen;
+		console.log(product);
+    }
+function eliminarProductoPorId(id, res) {
+    modeloProducto.findOneAndDelete({ referencia: id }, (err, result) => {
+        if (err) {
+            return res.status(500).json({ mensaje: err.message });
+        }
+        if (!result) {
+            return res.status(404).json({ mensaje: "Producto no encontrado" });
+        }
+        res.status(200).json({ mensaje: "Eliminación exitosa" });
+    });
+}
+</script>
 
 </body>

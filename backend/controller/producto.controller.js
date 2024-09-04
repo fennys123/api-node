@@ -43,33 +43,40 @@ exports.agregarProductos = async (req, res) => {
 };
 
 
-
 exports.actualizarProductos = async (req, res) => {
-    const actualizarProducto = {
-        referencia: req.params.referenciaproducto,
-        nombre: req.params.nombreproducto,
-        descripcion: req.params.descripcionproducto,
-        precio: req.params.precioproducto,
-        stock: req.params.stockproducto,
-        imagen: req.params.imagenproducto,
-        habilitado: true,
-    };
+    const { id, nombre, descripcion, precio, stock, imagen } = req.body;
 
-    let Actualizacion = await modeloProducto.create(actualizarProducto);
-    if (Actualizacion)
-        res.status(200).json({ "mensaje": "actualizado correctamente" })
-    else
-        res.status(404).json({ "mensaje": "se presento un error" })
+    try {
+        let Actualizacion = await modeloProducto.findOneAndUpdate(
+            { referencia: id },
+            { nombre, descripcion, precio, stock, imagen, habilitado: true },
+            { new: true } // Devuelve el documento actualizado
+        );
+
+        if (Actualizacion) {
+            res.status(200).json({ "mensaje": "actualizado correctamente" });
+        } else {
+            res.status(404).json({ "mensaje": "producto no encontrado" });
+        }
+    } catch (error) {
+        res.status(500).json({ "mensaje": error.message });
+    }
 };
 
-exports.eliminarProductos = async (req, res) => {
-    console.log(req.params.id, req.body.referenciaproductoModel)
-    let eliminacion = await modeloProducto.findOneAndDelete({ referencia: req.params.id });
-    if (eliminacion)
-        res.status(200).json({ "mensaje": "eliminacion exitosa" })
-    else
-        res.status(404).json({ "mensaje": "se presento un error" })
 
+exports.eliminarProductos = async (req, res) => {
+    const { id } = req.body;
+
+    try {
+        let eliminacion = await modeloProducto.findOneAndDelete({ referencia: id });
+        if (eliminacion) {
+            res.status(200).json({ "mensaje": "eliminación exitosa" });
+        } else {
+            res.status(404).json({ "mensaje": "producto no encontrado" });
+        }
+    } catch (error) {
+        res.status(500).json({ "mensaje": error.message });
+    }
 };
 
 

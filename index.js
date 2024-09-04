@@ -15,7 +15,12 @@ app.use('/v1',router)
 app.use(exp.urlencoded({ extended: true }));
 app.use(exp.json());
 app.use(logger("dev"));
-app.use(express.static('./frontend/views/static'))
+app.use(express.static('frontend/views/static'));
+app.use(express.static('frontend/views/static/css'));
+app.use(express.static('frontend/views/static/js'));
+app.use(express.static('frontend/views/static/images'));
+
+
 
 //el inicio de la pagina
 app.get('/', async (req, res) => {
@@ -71,7 +76,7 @@ app.get('/enviarCorreo', async (req, res) => {
     );
 })
 
-app.get('/catalogo', (req, res) => {
+app.get('/menu', (req, res) => {
     // Ejemplo de productos
     const productos = [
         { id: 1, nombre: 'carro', precio: 10 },
