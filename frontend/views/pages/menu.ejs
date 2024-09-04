@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <style>
+        /* Estilos para la barra de navegación */
+        nav {
+            background-color: #6c757d;
+            /* Fondo gris oscuro */
+            color: #060505;
+            /* Texto oscuro */
+            padding: 10px;
+            /* Espaciado interno ajustado */
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            /* Utilizar flexbox para alinear los elementos */
+            align-items: center;
+            /* Alinear verticalmente los elementos en el centro */
+        }
+
+        nav a {
+            color: #080505;
+            /* Color de los enlaces */
+            margin-right: 10px;
+            /* Reducir el margen entre los enlaces */
+            text-decoration: none;
+            font-size: 16px;
+            /* Ajustar el tamaño de la fuente */
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        body {
+            padding-top: 60px;
+            /* Espacio para que el contenido no quede debajo de la barra */
+            margin: 0;
+            /* Eliminar márgenes del cuerpo */
+            font-family: Arial, sans-serif;
+            /* Fuente base */
+        }
+    </style>
+    <%- include('../partials/head'); %>
+        <%- include('../partials/navbar'); %>
+</head>
+
+<body>
+    <header>
+        <h1 style="color: red;">Menu de Productos</h1>
+    </header>
+    <main class="container mt-5">
+        <h2>Productos disponibles</h2>
+        <div class="row">
+            <% productos.forEach(producto=> { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="width: 18rem;">
+                        <img src="<%= producto.imagen %>" class="card-img-top" alt="<%= producto.nombre %>">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= producto.nombre %>
+                            </h5>
+                            <p class="card-text">descripcion: <%= producto.descripcion %>
+                            </p>
+                            <p class="card-text">Precio: $<%= producto.precio %>
+                            </p>
+                            <form id="form-<%= producto.referencia %>" action="carrito/añadir" method="POST"
+                                onsubmit="handleAddToCart(event, '<%= producto.referencia %>')">
+                                <input type="hidden" name="id" value="<%= producto.referencia %>">
+                                <input type="number" name="cantidad" value="1" min="1" class="form-control mb-2">
+                                <button type="submit" class="btn btn-outline-success">Añadir al carrito</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+    </main>
+    <footer class="text-center mt-4">
+        <p>&copy; 2024 Tienda</p>
+    </footer>
+
+    <!-- Offcanvas -->
+    <div class="offcanvas offcanvas-end" id="offcanvasCarrito" tabindex="-1" aria-labelledby="offcanvasCarritoLabel">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasCarritoLabel">Carrito</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <h2>Productos en tu carrito</h2>
+            <ul class="list-group" id="carritoItems">
+                <!-- Items del carrito se añadirán aquí -->
+            </ul>
+            <h3 class="mt-4" id="totalCarrito">Total: $0</h3>
+        </div>
+    </div>
+
+    <!-- Scripts de Bootstrap -->
+    <script>
+        function handleAddToCart(event, productoId) {
+            event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+            const form = document.getElementById(`form-${productoId}`);
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Asume que la respuesta es JSON
+                    }
+                    throw new Error('Error al añadir al carrito');
+                })
+                .then(data => {
+                    // Actualizar el carrito en el offcanvas
+                    updateOffcanvas(data);
+                    // Mostrar el offcanvas
+                    const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasCarrito'));
+                    offcanvas.show();
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    </script>
+    <script src="js/scripts.js"></script>
+    <script src="css/styles.css"></script>
+</body>
+
+</html>

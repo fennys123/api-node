@@ -5,26 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito</title>
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <%- include('../partials/head'); %>
     <%- include('../partials/navbar'); %>
 </head>
 <body>
-    <main>
+    <main class="container mt-5">
         <h2>Productos en tu carrito</h2>
-        <ul>
+        <ul class="list-group">
             <% carrito.forEach(item => { %>
-                <li>
-                    <h3><%= item.nombre %></h3>
+                <li class="list-group-item">
+                    <h5><%= item.nombre %></h5>
                     <p>Precio: $<%= item.precio %> x <%= item.cantidad %></p>
                     <p>Total: $<%= item.precio * item.cantidad %></p>
                 </li>
             <% }) %>
         </ul>
-        <h3>Total: $<%= carrito.reduce((total, item) => total + item.precio * item.cantidad, 0) %></h3>
+        <h3 class="mt-4">Total: $<%= carrito.reduce((total, item) => total + item.precio * item.cantidad, 0) %></h3>
     </main>
-    <footer>
+    <footer class="text-center mt-4">
         <p>&copy; 2024 Tienda</p>
     </footer>
-    <script src="/scripts.js"></script>
+    <script src="js/scripts.js"></script>
+    <script src="css/styles.css"></script>
 </body>
 </html>

@@ -34,6 +34,8 @@ router.post('/usuarios',controladorUsuarios.agregarUsuarios)
 router.put('/usuarios/:nombre',controladorUsuarios.actualizarUsuarios)
 router.delete('/usuarios/:telefono',controladorUsuarios.eliminarUsuarios)
 
+//carrito
+router.use(express.static('frontend/views/static'));
 
 
 module.exports = router;
