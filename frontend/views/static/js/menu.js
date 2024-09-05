@@ -70,7 +70,7 @@ function removeFromCart(id) {
         });
 }
 
-function clearCart() {
+function limpiarCarrito() {
     fetch('/carrito/limpiar', {
         method: 'POST',
         headers: {
@@ -87,7 +87,7 @@ function clearCart() {
             console.error(error);
         });
 }
-function proceedToPayment() {
+function pagar() {
     fetch('/carrito/pagar', {
         method: 'POST',
         headers: {
