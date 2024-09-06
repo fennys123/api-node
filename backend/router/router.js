@@ -5,12 +5,14 @@ const controladorCliente = require('../controller/cliente.controller');
 const controladorPedidos = require('../controller/pedidos.controller');
 const controladorUsuarios = require('../controller/user.controller');
 
+
 // Rutas para productos
 router.get('/productos', controladorproductos.listarProductos);
 router.get('/productos/:ref', controladorproductos.consultarProductos);
 router.post('/productos', controladorproductos.agregarProductos);
 router.put('/productos/:ref', controladorproductos.actualizarProducto);
 router.delete('/productos/:ref', controladorproductos.eliminarProductos);
+
 
 // Rutas para clientes
 router.get('/clientes', controladorCliente.listarClientes);
@@ -31,8 +33,8 @@ router.delete('/pedidos/:cliente',controladorPedidos.eliminarPedidos)
 router.get('/usuarios',controladorUsuarios.listarUsuarios)
 router.get('/usuarios/:correo',controladorUsuarios.consultarUsuarios)
 router.post('/usuarios',controladorUsuarios.agregarUsuarios)
-router.put('/usuarios/:nombre',controladorUsuarios.actualizarUsuarios)
-router.delete('/usuarios/:telefono',controladorUsuarios.eliminarUsuarios)
+router.put('/usuarios/:ref',controladorUsuarios.actualizarUsuarios)
+router.delete('/usuarios/:ref',controladorUsuarios.eliminarUsuarios)
 
 //carrito
 router.use(express.static('frontend/views/static'));

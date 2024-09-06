@@ -1,7 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Productos</title>
+    <style>
+        /* Estilos para la barra de navegación */
+nav {
+    background-color: #6c757d;
+    color: #060505;
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: #080505;
+    margin-right: 10px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+body {
+    padding-top: 60px; /* Añade un padding superior para evitar que el contenido se superponga con el navbar */
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+    </style>
+
     <%- include('../partials/head'); %>
+    <%- include('../partials/navbar'); %>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body class="container">
     <table class="table">
@@ -27,17 +63,25 @@
                     <td><%= producto.habilitado ? 'Sí' : 'No' %></td>
                     <td>
                         <!-- Botón para abrir el modal de editar -->
-                        <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal" 
+                        <button class="btn btn-outline-warning" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#editModal" 
                                 onclick="fillEditForm(<%= JSON.stringify(producto) %>)">
                             <i class="bi bi-pencil-square"></i>
                         </button>
-
+                        
                         <!-- Formulario para eliminar el producto -->
-                        <form method="POST" action="/productos/<%= producto.referencia %>?_method=DELETE" style="display:inline;">
+                        <form method="POST" action="/v1/productos/<%= producto.referencia %>?_method=DELETE" style="display:inline;">
                             <button class="btn btn-outline-danger" type="submit">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </form>
+                        
+
+                        <!-- Botón para agregar nuevo producto -->
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
                     </td>
                 </tr>
             <% }) %>
@@ -45,55 +89,95 @@
     </table>
 
     <!-- Modal para editar producto -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" method="POST" >
+                    <div class="mb-3">
+                        <label for="editReferencia" class="form-label">Ref</label>
+                        <input type="text" class="form-control" id="editReferencia" name="ref">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editNombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="editNombre" name="nombre">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescripcion" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="editDescripcion" name="descripcion">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrecio" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="editPrecio" name="precio">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editStock" class="form-label">Stock</label>
+                        <input type="number" class="form-control" id="editStock" name="stock">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editImagen" class="form-label">Imagen</label>
+                        <input type="text" class="form-control" id="editImagen" name="imagen">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Modal para agregar producto -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Editar Producto</h5>
+                    <h5 class="modal-title" id="addModalLabel">Agregar Producto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editForm" method="POST" action="/productos?_method=PUT">
-                        <input type="hidden" name="id" id="productId">
+                    <form id="addForm" method="POST" action="/productos">
                         <div class="mb-3">
-                            <label for="editNombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="editNombre" name="nombre">
+                            <label for="addNombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="addNombre" name="nombreProducto" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editDescripcion" class="form-label">Descripción</label>
-                            <input type="text" class="form-control" id="editDescripcion" name="descripcion">
+                            <label for="addDescripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="addDescripcion" name="descripcionProducto" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editPrecio" class="form-label">Precio</label>
-                            <input type="number" class="form-control" id="editPrecio" name="precio">
+                            <label for="addPrecio" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="addPrecio" name="precioProducto" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editStock" class="form-label">Stock</label>
-                            <input type="number" class="form-control" id="editStock" name="stock">
+                            <label for="addStock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="addStock" name="stockProducto" required>
                         </div>
                         <div class="mb-3">
-                            <label for="editImagen" class="form-label">Imagen</label>
-                            <input type="text" class="form-control" id="editImagen" name="imagen">
+                            <label for="addImagen" class="form-label">Imagen</label>
+                            <input type="text" class="form-control" id="addImagen" name="imagenProducto" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        <button type="submit" class="btn btn-primary">Agregar</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <%- include('../partials/footer'); %>
-
     <script>
-        // Llenar el formulario con los datos del producto seleccionado
-        function fillEditForm(product) {
-            document.getElementById('productId').value = product.referencia;
-            document.getElementById('editNombre').value = product.nombre;
-            document.getElementById('editDescripcion').value = product.descripcion;
-            document.getElementById('editPrecio').value = product.precio;
-            document.getElementById('editStock').value = product.stock;
-            document.getElementById('editImagen').value = product.imagen;
-        }
+function fillEditForm(product) {
+    document.getElementById('editReferencia').value = product.referencia;
+    document.getElementById('editNombre').value = product.nombre;
+    document.getElementById('editDescripcion').value = product.descripcion;
+    document.getElementById('editPrecio').value = product.precio;
+    document.getElementById('editStock').value = product.stock;
+    document.getElementById('editImagen').value = product.imagen;
+
+    // Configurar la acción del formulario para la actualización
+    document.getElementById('editForm').action = `/v1/productos/${product.referencia}?_method=PUT`; 
+}
     </script>
 </body>
 </html>

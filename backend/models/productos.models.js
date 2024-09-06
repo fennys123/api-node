@@ -3,7 +3,7 @@ const { default: mongoose, version } = require('mongoose');
 
 const productoSchema = new mongoose.Schema({
     referencia:{
-        type:String,
+        type: String,
         require: [true,'la referencia es obligatoria']
     },
     nombre: {

@@ -25,6 +25,7 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(methodOverride('_method'));
+app.use(express.urlencoded({ extended: false }));
 
 
 
