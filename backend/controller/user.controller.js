@@ -4,9 +4,9 @@ const modeloUsuarios = require('../models/user.models')
 exports.listarUsuarios = async(req,res)=>{
     let listadoProducto = await modeloUsuarios.find({});
     if (listadoProducto)
-        res.render('pages/listarProductos', { listadoProducto })
+        res.render('pages/producto/listarUsuario', { listadoProducto })
     else
-        res.render('pages/listarProductos')
+        res.render('pages/producto/listarUsuario')
 
 }
 

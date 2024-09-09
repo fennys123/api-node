@@ -4,9 +4,9 @@ exports.listarProductos = async (req, res) => {
     try {
         const listadoProducto = await modeloProducto.find({});
         if (listadoProducto.length > 0) {
-            res.render('pages/listarProductos', { listadoProducto });
+            res.render('pages/producto/listarProductos', { listadoProducto });
         } else {
-            res.render('pages/listarProductos', { mensaje: "No hay productos disponibles" });
+            res.render('pages/producto/listarProductos', { mensaje: "No hay productos disponibles" });
         }
     } catch (error) {
         console.error(error);
