@@ -1,4 +1,4 @@
-const modeloProducto = require('../models/productos.models')
+const modeloProducto = require('../models/productos.models');
 
 exports.listarProductos = async (req, res) => {
     try {
@@ -16,7 +16,7 @@ exports.listarProductos = async (req, res) => {
 
 exports.consultarProductos = async (req, res) => {
     try {
-        const producto = await modeloProducto.findOne({ price: req.params.precio });
+        const producto = await modeloProducto.findOne({ referencia: req.params.ref }); // Cambiado a referencia
         if (producto) {
             res.status(200).json(producto);
         } else {
@@ -26,21 +26,6 @@ exports.consultarProductos = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-exports.listarProductos = async (req, res) => {
-    try {
-        const listadoProducto = await modeloProducto.find({});
-        if (listadoProducto) {
-            res.render('pages/listarProductos', { listadoProducto });
-        } else {
-            res.render('pages/listarProductos', { mensaje: "No hay productos disponibles" });
-        }
-    } catch (error) {
-        res.status(500).send({ error: "Error al listar los productos" });
-    }
-};
-
-
 
 exports.agregarProductos = async (req, res) => {
     try {
@@ -59,13 +44,12 @@ exports.agregarProductos = async (req, res) => {
         console.log('Nuevo Producto:', nuevoProducto); // Log product to be created
 
         await modeloProducto.create(nuevoProducto);
-        res.redirect('/productos');
+        res.redirect('/v1/productos'); // Asegúrate de redirigir a la ruta correcta
     } catch (error) {
         console.error(error);
         res.status(500).send({ mensaje: "Error al agregar el producto" });
     }
 };
-
 
 exports.actualizarProducto = async (req, res) => {
     try {
@@ -82,22 +66,20 @@ exports.actualizarProducto = async (req, res) => {
             return res.status(404).send('Producto no encontrado');
         }
 
-        res.redirect('/productos');
+        res.redirect('/v1/productos'); // Asegúrate de redirigir a la ruta correcta
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al actualizar el producto');
     }
 };
 
-
-
 exports.eliminarProductos = async (req, res) => {
     try {
-        console.log('Producto reference a eliminar:', req.params.ref); // Log reference
+        console.log('Producto referencia a eliminar:', req.params.ref); // Log reference
 
         let eliminacion = await modeloProducto.findOneAndDelete({ referencia: req.params.ref });
         if (eliminacion) {
-            res.redirect('/productos'); // Redirigir después de eliminar
+            res.redirect('/v1/productos'); // Asegúrate de redirigir a la ruta correcta
         } else {
             res.status(404).json({ mensaje: "Producto no encontrado" });
         }
@@ -106,11 +88,3 @@ exports.eliminarProductos = async (req, res) => {
         res.status(500).json({ mensaje: error.message });
     }
 };
-
-
-
-
-
-
-
-

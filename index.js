@@ -27,6 +27,8 @@ app.use(session({
 app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: false }));
 
+const cors = require('cors');
+app.use(cors());
 
 
 // Configuración de vistas
