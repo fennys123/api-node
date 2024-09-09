@@ -27,6 +27,7 @@
     "override": "^0.0.1",
     "path": "^0.12.7",
     "session": "^0.1.0",
+    "stripe": "^16.10.0",
     "view": "^1.1.1"
   },
   "devDependencies": {

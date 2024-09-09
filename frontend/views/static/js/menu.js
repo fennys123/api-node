@@ -1,7 +1,7 @@
-function handleAddToCart(event, productoId) {
+function añadirCarrito(event, producto) {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
-    const form = document.getElementById(`form-${productoId}`);
+    const form = document.getElementById(`form-${producto}`);
     const formData = new URLSearchParams(new FormData(form));
 
     fetch(form.action, {
@@ -88,29 +88,5 @@ function limpiarCarrito() {
         });
 }
 function pagar() {
-    fetch('/carrito/pagar', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Vaciar el carrito y actualizar el offcanvas
-                updateOffcanvas({ carrito: [], total: 0 });
-
-                // Mostrar mensaje de compra exitosa
-                alert('Compra realizada con éxito.');
-
-                // Opcionalmente, redirigir a otra página después del pago
-                window.location.href = '/'; // Redirige al índice o a la página que desees
-            } else {
-                alert('Hubo un problema al procesar el pago. Inténtalo nuevamente.');
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            alert('Error al procesar el pago.');
-        });
+    location.href = '/v1/checkout';
 }

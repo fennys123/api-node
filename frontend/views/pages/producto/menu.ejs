@@ -47,8 +47,8 @@
             /* Fuente base */
         }
     </style>
-    <%- include('../partials/head'); %>
-        <%- include('../partials/navbar'); %>
+    <%- include('../../partials/head'); %>
+        <%- include('../../partials/navbar'); %>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
             <link rel="stylesheet" href="/css/styles.css">
 
@@ -74,7 +74,7 @@
                             <p class="card-text">Precio: $<%= producto.precio %>
                             </p>
                             <form id="form-<%= producto.referencia %>" action="/carrito/agregar" method="POST"
-                                onsubmit="handleAddToCart(event, '<%= producto.referencia %>')">
+                                onsubmit="añadirCarrito(event, '<%= producto.referencia %>')">
                                 <input type="hidden" name="id" value="<%= producto.referencia %>">
                                 <input type="number" name="cantidad" value="1" min="1" class="form-control mb-2">
                                 <button type="submit" class="btn btn-outline-success">Añadir al carrito</button>

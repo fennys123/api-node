@@ -90,12 +90,12 @@ app.get('/menu', (req, res) => {
         { referencia: 1, nombre: 'ropa', precio: 10000, descripcion: 'prueba', stock: 50, imagen: '/images/ropa.png', habilitado: true },
         { referencia: 2, nombre: 'ropa', precio: 20000, descripcion: 'prueba', stock: 50, imagen: '/images/ropa.png', habilitado: true }
     ];
-    res.render('pages/menu', { productos });
+    res.render('pages/producto/menu', { productos });
 });
 
 app.get('/carrito', (req, res) => {
     const carrito = req.session.carrito || [];
-    res.render('pages/carrito', { carrito });
+    res.render('pages/producto/carrito', { carrito });
 });
 
 app.post('/carrito/agregar', async (req, res) => {
